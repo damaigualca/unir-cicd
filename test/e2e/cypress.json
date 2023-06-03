@@ -1,4 +1,6 @@
 {
+  "chromeWebSecurity": false,
+  "headless": true,
   "pluginsFile": false,
   "supportFile": false,
   "defaultCommandTimeout": 1000,

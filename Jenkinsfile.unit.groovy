@@ -56,8 +56,11 @@ pipeline {
                 def buildNumber = env.BUILD_NUMBER
                 def recipient = "admaigualca@gmail.com"
                 def subject = "Pipeline fallido: ${jobName} #${buildNumber}"
-                def body = "El trabajo ${jobName} ha fallado en la ejecución número ${buildNumber}. Por favor, revisa los registros y toma las acciones necesarias."
-
+                def body = |
+                    <p>El pipeline <strong>${jobName} #${buildNumber}</strong> ha fallado.</p>
+                    <p>Revisar el estado del pipeline <a href="${env.BUILD_URL}">aquí</a>.</p>
+                    <p>Puedes ver los logs de la ejecución <a href="${env.BUILD_URL}console">aquí</a>.</p>
+                    <p>Saludos.</p>
                 emailext (
                     to: recipient,
                     subject: subject,

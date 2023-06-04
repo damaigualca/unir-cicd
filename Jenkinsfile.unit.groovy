@@ -5,38 +5,50 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Iniciando etapa de compilación!'
-                sh 'make build'
+                script {
+                    echo 'Iniciando etapa de compilación!'
+                    sh 'make build'
+                }
             }
         }
         stage('Unit tests') {
             steps {
-                sh 'make test-unit'
-                archiveArtifacts artifacts: 'results/*.xml'
+                script {
+                    sh 'make test-unit'
+                    archiveArtifacts artifacts: 'results/*.xml'
+                }
             }
         }
         stage('API tests') {
             steps {
-                sh 'make test-api'
-                archiveArtifacts artifacts: 'results/*.xml'
+                script {
+                    sh 'make test-api'
+                    archiveArtifacts artifacts: 'results/*.xml'
+                }
             }
         }
         stage('End-to-end tests') {
             steps {
-                sh 'make test-e2e'
-                archiveArtifacts artifacts: 'results/*.xml'
+                script {
+                    sh 'make test-e2e'
+                    archiveArtifacts artifacts: 'results/*.xml'
+                }
             }
         }
         stage('Print logs') {
             steps {
-                echo "Trabajo: ${env.JOB_NAME}"
-                echo "Ejecución número: ${env.BUILD_NUMBER}"
+                script {
+                    echo "Trabajo: ${env.JOB_NAME}"
+                    echo "Ejecución número: ${env.BUILD_NUMBER}"
+                }
             }
         }
     }
     post {
         always {
-            junit 'results/*_result.xml'
+            script {
+                junit 'results/*_result.xml'
+            }
         }
         failure {
             script {

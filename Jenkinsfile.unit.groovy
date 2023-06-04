@@ -4,35 +4,30 @@ pipeline {
     }
     stages {
         stage('Build') {
-            description 'Compila el proyecto'
             steps {
                 echo 'Iniciando etapa de compilación!'
                 sh 'make build'
             }
         }
         stage('Unit tests') {
-            description 'Ejecuta pruebas unitarias'
             steps {
                 sh 'make test-unit'
                 archiveArtifacts artifacts: 'results/*.xml'
             }
         }
         stage('API tests') {
-            description 'Ejecuta pruebas de API'
             steps {
                 sh 'make test-api'
                 archiveArtifacts artifacts: 'results/*.xml'
             }
         }
         stage('End-to-end tests') {
-            description 'Ejecuta pruebas end-to-end'
             steps {
                 sh 'make test-e2e'
                 archiveArtifacts artifacts: 'results/*.xml'
             }
         }
         stage('Print logs') {
-            description 'Imprime información del trabajo y la ejecución'
             steps {
                 echo "Trabajo: ${env.JOB_NAME}"
                 echo "Ejecución número: ${env.BUILD_NUMBER}"

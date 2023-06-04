@@ -4,33 +4,38 @@ pipeline {
     }
     stages {
         stage('Build') {
+            description 'Compila el proyecto'
             steps {
-                echo 'Building stage!'
+                echo 'Iniciando etapa de compilación!'
                 sh 'make build'
             }
         }
         stage('Unit tests') {
+            description 'Ejecuta pruebas unitarias'
             steps {
                 sh 'make test-unit'
                 archiveArtifacts artifacts: 'results/*.xml'
             }
         }
-        stage('Api tests') {
+        stage('API tests') {
+            description 'Ejecuta pruebas de API'
             steps {
                 sh 'make test-api'
                 archiveArtifacts artifacts: 'results/*.xml'
             }
         }
-        stage('e2e tests') {
+        stage('End-to-end tests') {
+            description 'Ejecuta pruebas end-to-end'
             steps {
                 sh 'make test-e2e'
                 archiveArtifacts artifacts: 'results/*.xml'
             }
         }
-        stage('print logs') {
+        stage('Print logs') {
+            description 'Imprime información del trabajo y la ejecución'
             steps {
-                echo "Trabajo ${env.JOB_NAME}"
-                echo "Ejecución número ${env.BUILD_NUMBER}"
+                echo "Trabajo: ${env.JOB_NAME}"
+                echo "Ejecución número: ${env.BUILD_NUMBER}"
             }
         }
     }
@@ -39,9 +44,19 @@ pipeline {
             junit 'results/*_result.xml'
         }
         failure {
-            emailext subject: "Pipeline fallido: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "El trabajo ${env.JOB_NAME} ha fallado en la ejecución número ${env.BUILD_NUMBER}. Por favor, revisa los registros y toma las acciones necesarias.",
-                    to: "admaigualca@gmail.com"
+            script {
+                def jobName = env.JOB_NAME
+                def buildNumber = env.BUILD_NUMBER
+                def recipient = "admaigualca@gmail.com"
+                def subject = "Pipeline fallido: ${jobName} #${buildNumber}"
+                def body = "El trabajo ${jobName} ha fallado en la ejecución número ${buildNumber}. Por favor, revisa los registros y toma las acciones necesarias."
+
+                emailext (
+                    to: recipient,
+                    subject: subject,
+                    body: body
+                )
+            }
         }
     }
 }

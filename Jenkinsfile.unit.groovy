@@ -15,6 +15,24 @@ pipeline {
                 archiveArtifacts artifacts: 'results/*.xml'
             }
         }
+        stage('Api tests') {
+            steps {
+                sh 'make test-api'
+                archiveArtifacts artifacts: 'results/*.xml'
+            }
+        }
+        stage('e2e tests') {
+            steps {
+                sh 'make test-e2e'
+                archiveArtifacts artifacts: 'results/*.xml'
+            }
+        }
+        stage('print logs') {
+            steps {
+                echo "Trabajo ${env.JOB_NAME}"
+                echo "Ejecución número ${env.BUILD_NUMBER}"
+            }
+        }
     }
     post {
         always {

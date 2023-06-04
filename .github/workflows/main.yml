@@ -52,7 +52,7 @@ jobs:
         echo "Ejecución número $GITHUB_RUN_NUMBER"
       
     - name: Publish JUnit test results
-      uses: EnricoMi/publish-unit-test-result-action@v2
+      uses: EnricoMi/publish-unit-test-result-action@v1
       with:
         files: results/*_result.xml
       
